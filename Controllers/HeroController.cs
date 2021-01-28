@@ -33,20 +33,20 @@ namespace SuperHeroCreator.Controllers
         }
 
         // GET: HeroController/Create
-        public IActionResult Create(Hero heroes)
+        public IActionResult Create()
         {
-            _context.Heroes.Add(heroes);
-            _context.SaveChanges();
-            return RedirectToAction("Index");
+            return View();
         }
 
         // POST: HeroController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public IActionResult Create(Hero hero)
         {
             try
             {
+                _context.Heroes.Add(hero);
+                _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -80,16 +80,19 @@ namespace SuperHeroCreator.Controllers
         // GET: HeroController/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            Hero delete = _context.Heroes.Where(d => d.Id == id).FirstOrDefault();
+            return View(delete);
         }
 
         // POST: HeroController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int id, Hero hero)
         {
             try
             {
+                _context.Heroes.Remove(hero);
+                _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             catch
