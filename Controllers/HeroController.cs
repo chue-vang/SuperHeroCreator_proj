@@ -28,7 +28,6 @@ namespace SuperHeroCreator.Controllers
         //GET: HeroController/Details/5
         public IActionResult Details(int id)
         {
-
             return View();
         }
 
@@ -56,19 +55,21 @@ namespace SuperHeroCreator.Controllers
         }
 
         // GET: HeroController/Edit/5
-        public ActionResult Edit(int id) 
+        public IActionResult Edit(int id) 
         {
-           // Hero editHero = _context.Heroes.Where(e => e.Id == id).
-            return View();
+            Hero edit = _context.Heroes.Where(e => e.Id == id).SingleOrDefault();
+            return View(edit);
         }
 
         // POST: HeroController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public IActionResult Edit(Hero edit)
         {
             try
             {
+                _context.Heroes.Update(edit);
+                _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -80,7 +81,7 @@ namespace SuperHeroCreator.Controllers
         // GET: HeroController/Delete/5
         public ActionResult Delete(int id)
         {
-            Hero delete = _context.Heroes.Where(d => d.Id == id).FirstOrDefault();
+            Hero delete = _context.Heroes.Where(d => d.Id == id).SingleOrDefault();
             return View(delete);
         }
 
